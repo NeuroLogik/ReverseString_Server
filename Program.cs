@@ -10,7 +10,9 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            Server server = new Server();
+            TransportIPv4 transport = new TransportIPv4();
+            transport.Bind("192.168.0.101", 9999);
+            Server server = new Server(transport);
             server.Run();
         }
     }
