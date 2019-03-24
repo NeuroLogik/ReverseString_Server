@@ -9,6 +9,8 @@ namespace Server
     public class Server
     {
         ITransport transport;
+        public byte[] ReceivedDdata;
+        public byte[] ReversedData;
 
         public Server(ITransport transport)
         {
@@ -17,17 +19,22 @@ namespace Server
 
         public void Run()
         {
-            while (true)
+            while(true)
             {
-                byte[] data = transport.Receive();
+                SingleStep();
+            }
+        }
 
-                if (data != null)
-                {
-                    string message = StringFromBytes(data);
-                    string reversedMessage = ReverseString(message);
-                    byte[] reversedData = BytesFromString(reversedMessage);
-                    transport.Send(reversedData);
-                }
+        public void SingleStep()
+        {
+            ReceivedDdata = transport.Receive();
+
+            if (ReceivedDdata != null)
+            {
+                string message = StringFromBytes(ReceivedDdata);
+                string reversedMessage = ReverseString(message);
+                ReversedData = BytesFromString(reversedMessage);
+                transport.Send(ReversedData);
             }
         }
 
